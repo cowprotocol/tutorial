@@ -12,3 +12,4 @@
 /content/tutorial/common/.svelte-kit
 /content/tutorial/common/node_modules
 /test-results
+.pnpm-store

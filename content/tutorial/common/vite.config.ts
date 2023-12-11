@@ -5,13 +5,9 @@ export default defineConfig({
 	plugins: [
 		sveltekit()
 	],
-	resolve: {
-		alias: {
-			stream: 'stream-browserify'
-		}
-	},
 	define: {
 		global: 'global',
+		process: '{ env: {} }',
 	},
 	// Normally this would be unnecessary, but we
 	// need it for learn.svelte.dev

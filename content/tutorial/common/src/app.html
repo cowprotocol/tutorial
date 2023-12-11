@@ -5,6 +5,9 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="color-scheme" content="dark light" />
+		<script>
+			global = typeof global === 'undefined' ? window : global
+		</script>
 		%sveltekit.head%
 
 		<style>

@@ -3,7 +3,7 @@ import base64 from 'base64-js';
 import AnsiToHtml from 'ansi-to-html';
 import * as yootils from 'yootils';
 import { escape_html, get_depth } from '../../../utils.js';
-import { ready } from '../cow-tutorials/index.js';
+import { ready } from '../common/index.js';
 
 /**
  * @typedef {import("../../../../routes/tutorial/[slug]/state.js").CompilerWarning} CompilerWarning
@@ -16,7 +16,7 @@ const converter = new AnsiToHtml({
 /** @type {import('@webcontainer/api').WebContainer} Web container singleton */
 let vm;
 
-const rootProject = 'cow-tutorials'
+const rootProject = 'common'
 
 /**
  * @param {import('svelte/store').Writable<string | null>} base

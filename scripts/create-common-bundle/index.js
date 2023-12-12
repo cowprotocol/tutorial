@@ -9,7 +9,7 @@ if (!!process.env.VERCEL) {
 	execSync('git clean -d -f content/tutorial');
 }
 
-const rootProject = 'cow-tutorials'
+const rootProject = 'common'
 const cwd = `content/tutorial/${rootProject}`;
 
 execSync('yarn', { cwd });

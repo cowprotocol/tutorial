@@ -68,14 +68,14 @@
 			loading = false;
 
 			clearTimeout(timeout);
-			timeout = setTimeout(() => {
-				if (dev && !iframe) return;
-
-				// we lost contact, refresh the page
-				loading = true;
-				set_iframe_src($base + path);
-				loading = false;
-			}, 1000);
+			// timeout = setTimeout(() => {
+			// 	if (dev && !iframe) return;
+			//
+			// 	// we lost contact, refresh the page
+			// 	loading = true;
+			// 	set_iframe_src($base + path);
+			// 	loading = false;
+			// }, 1000);
 		} else if (e.data.type === 'ping-pause') {
 			clearTimeout(timeout);
 		}

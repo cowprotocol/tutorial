@@ -9,9 +9,10 @@ if (!!process.env.VERCEL) {
 	execSync('git clean -d -f content/tutorial');
 }
 
-const cwd = 'content/tutorial/common';
+const rootProject = 'cow-tutorials'
+const cwd = `content/tutorial/${rootProject}`;
 
-execSync('npm ci', { cwd });
+execSync('yarn', { cwd });
 
 const zip = new AdmZip();
 
@@ -19,9 +20,7 @@ const zip = new AdmZip();
 // this is a bit ropey, but it works
 const ignored_basenames = ['.DS_Store', 'LICENSE'];
 const ignored_extensions = ['.d.ts', '.map'];
-const ignored_directories = ['.svelte-kit', 'node_modules/.bin', 'node_modules/rollup/dist/shared'];
-
-const ignored_files = new Set(['node_modules/svelte/compiler.cjs']);
+const ignored_directories = ['node_modules/.bin', 'node_modules/rollup/dist/shared'];
 
 for (const file of glob('**', { cwd, filesOnly: true, dot: true }).map((file) =>
 	file.replaceAll('\\', '/')
@@ -29,11 +28,6 @@ for (const file of glob('**', { cwd, filesOnly: true, dot: true }).map((file) =>
 	if (ignored_extensions.find((ext) => file.endsWith(ext))) continue;
 	if (ignored_basenames.find((basename) => file.endsWith('/' + basename))) continue;
 	if (ignored_directories.find((dir) => file.startsWith(dir + '/'))) continue;
-
-	if (ignored_files.has(file)) {
-		ignored_files.delete(file);
-		continue;
-	}
 
 	if (file.startsWith('node_modules/esbuild/') || file.startsWith('node_modules/@esbuild/')) {
 		continue;
@@ -45,13 +39,9 @@ for (const file of glob('**', { cwd, filesOnly: true, dot: true }).map((file) =>
 	);
 }
 
-if (ignored_files.size > 0) {
-	throw new Error(`expected to find ${Array.from(ignored_files).join(', ')}`);
-}
-
 const out = zip.toBuffer();
 
-fs.writeFileSync(`src/lib/client/adapters/common/common.zip`, out);
+fs.writeFileSync(`src/lib/client/adapters/${rootProject}/${rootProject}.zip`, out);
 
 // bundle adm-zip so we can use it in the webcontainer
 esbuild.buildSync({
@@ -59,6 +49,6 @@ esbuild.buildSync({
 	bundle: true,
 	platform: 'node',
 	minify: true,
-	outfile: 'src/lib/client/adapters/common/unzip.cjs',
+	outfile: `src/lib/client/adapters/${rootProject}/unzip.cjs`,
 	format: 'cjs'
 });

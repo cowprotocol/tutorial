@@ -3,7 +3,7 @@ import base64 from 'base64-js';
 import AnsiToHtml from 'ansi-to-html';
 import * as yootils from 'yootils';
 import { escape_html, get_depth } from '../../../utils.js';
-import { ready } from '../common/index.js';
+import { ready } from '../cow-tutorials/index.js';
 
 /**
  * @typedef {import("../../../../routes/tutorial/[slug]/state.js").CompilerWarning} CompilerWarning
@@ -15,6 +15,8 @@ const converter = new AnsiToHtml({
 
 /** @type {import('@webcontainer/api').WebContainer} Web container singleton */
 let vm;
+
+const rootProject = 'cow-tutorials'
 
 /**
  * @param {import('svelte/store').Writable<string | null>} base
@@ -39,8 +41,9 @@ export async function create(base, error, progress, logs, warnings) {
 
 	progress.set({ value: 2 / 5, text: 'writing virtual files' });
 	const common = await ready;
+
 	await vm.mount({
-		'common.zip': {
+		[`${rootProject}.zip`]: {
 			file: { contents: new Uint8Array(common.zipped) }
 		},
 		'unzip.cjs': {

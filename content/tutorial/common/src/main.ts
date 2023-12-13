@@ -1,11 +1,15 @@
 import './style.css'
 import typescriptLogo from './typescript.svg'
 import viteLogo from '/vite.svg'
+import { run } from './lib/code.ts'
 import { setupCounter } from './counter.ts'
+import {connection} from "./connection.ts";
 
 // Launch the tutorial app
-window.parent.postMessage({type: 'ping'}, '*')
-// window.parent.postMessage({type: 'path', path: '/'}, '*')
+connection()
+
+// Launch exercise
+run()
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>

@@ -9,7 +9,7 @@ test('.env file: no timeout error occurs when switching a tutorials without a .e
 }) => {
 	await page.bringToFront();
 
-	await page.goto('/tutorial/welcome-to-svelte');
+	await page.goto('/tutorial/limit-order');
 
 	const iframe_locator = page.frameLocator(iframe_selector);
 
@@ -39,7 +39,7 @@ test('.env file: environment variables are available when switching a tutorial w
 }) => {
 	await page.bringToFront();
 
-	await page.goto('/tutorial/welcome-to-svelte');
+	await page.goto('/tutorial/limit-order');
 
 	const iframe_locator = page.frameLocator(iframe_selector);
 

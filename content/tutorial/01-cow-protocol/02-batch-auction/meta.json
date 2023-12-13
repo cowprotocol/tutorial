@@ -4,5 +4,5 @@
 		"prefix": "/src/lib/",
 		"name": "src"
 	},
-	"focus": "/src/lib/code.ts"
+	"focus": "/src/lib/run.ts"
 }

@@ -1,32 +1,35 @@
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { run } from './lib/code.ts'
-import { setupCounter } from './counter.ts'
-import {connection} from "./connection.ts";
+import './types.ts'
+
+import { Buffer } from 'buffer'
+window.Buffer = Buffer // Yep, this is a hack
+
+import { run } from './lib/run.ts'
+import { connection } from './connection.ts'
+import { web3Provider } from './web3-provider.ts'
 
 // Launch the tutorial app
 connection()
 
-// Launch exercise
-run()
-
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
+  <button id="runExample">Run example</button>
+  <br/>
+  <p>Output:</p>
+  <textarea id="outputContainer" readonly></textarea>
 `
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+const runExampleBtn = document.querySelector<HTMLButtonElement>('#runExample')!
+const outputContainer = document.querySelector<HTMLTextAreaElement>('#outputContainer')!
+
+// Launch exercise
+runExampleBtn.addEventListener('click', async () => {
+  runExampleBtn.innerHTML = 'Running...'
+
+  run(web3Provider).then(result => {
+    outputContainer.innerHTML = JSON.stringify(result, null, 4)
+  }).catch(error => {
+    outputContainer.innerHTML = error.message
+  }).finally(() => {
+    runExampleBtn.innerHTML = 'Run example'
+  })
+})

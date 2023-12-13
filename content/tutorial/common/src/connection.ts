@@ -1,3 +1,7 @@
+/**
+ * The app periodically pings the tutorial app to check if it is still alive
+ * See Output.svelte
+ */
 export function connection() {
     ping()
 

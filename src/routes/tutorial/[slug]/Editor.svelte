@@ -116,8 +116,10 @@
 			} else {
 				let lang;
 
-				if (file.name.endsWith('.js') || file.name.endsWith('.json')) {
-					lang = [javascript()];
+        const isTs = file.name.endsWith('.ts')
+
+				if (file.name.endsWith('.js') || isTs || file.name.endsWith('.json')) {
+					lang = [javascript({typescript: isTs})];
 				} else if (file.name.endsWith('.html')) {
 					lang = [html()];
 				} else if (file.name.endsWith('.svelte')) {

@@ -87,7 +87,7 @@ export async function create(base, error, progress, logs, warnings) {
 
 				} else {
 					const log = converter.toHtml(escape_html(chunk)).replace(/\n/g, '<br>');
-					logs.update(($logs) => [...$logs, log]);
+          logs.update(($logs) => [...$logs, log]);
 				}
 			}
 		});

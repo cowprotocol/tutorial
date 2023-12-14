@@ -1,4 +1,4 @@
-# learn.svelte.dev
+# CoW Tutorial
 
 A soup-to-nuts interactive tutorial on how to build apps with Svelte.
 

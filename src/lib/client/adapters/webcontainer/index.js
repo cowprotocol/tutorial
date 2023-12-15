@@ -16,6 +16,8 @@ const converter = new AnsiToHtml({
 /** @type {import('@webcontainer/api').WebContainer} Web container singleton */
 let vm;
 
+const rootProject = 'common'
+
 /**
  * @param {import('svelte/store').Writable<string | null>} base
  * @param {import('svelte/store').Writable<Error | null>} error
@@ -39,8 +41,9 @@ export async function create(base, error, progress, logs, warnings) {
 
 	progress.set({ value: 2 / 5, text: 'writing virtual files' });
 	const common = await ready;
+
 	await vm.mount({
-		'common.zip': {
+		[`${rootProject}.zip`]: {
 			file: { contents: new Uint8Array(common.zipped) }
 		},
 		'unzip.cjs': {
@@ -84,7 +87,7 @@ export async function create(base, error, progress, logs, warnings) {
 
 				} else {
 					const log = converter.toHtml(escape_html(chunk)).replace(/\n/g, '<br>');
-					logs.update(($logs) => [...$logs, log]);
+          logs.update(($logs) => [...$logs, log]);
 				}
 			}
 		});

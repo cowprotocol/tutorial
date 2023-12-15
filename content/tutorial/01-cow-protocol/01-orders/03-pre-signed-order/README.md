@@ -23,7 +23,7 @@ For pre-signed orders, we need to use:
 ## Define the order parameters
 
 First of all, we should define the order parameters.
-The description of each parameter can be found in the [Order structure docs.](./TODO)
+The description of each parameter can be found in the [Order structure docs.](https://TODO)
 
 ```
 const defaultOrder: UnsignedOrder = {

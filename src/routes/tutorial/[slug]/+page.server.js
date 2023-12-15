@@ -7,7 +7,7 @@ export function entries() {
 
 export async function load({ params }) {
 	if (params.slug === 'local-transitions') {
-		throw redirect(307, '/tutorial/global-transitions');
+		throw redirect(307, '/tutorial/sign-order');
 	}
 
 	const exercise = await get_exercise(params.slug);

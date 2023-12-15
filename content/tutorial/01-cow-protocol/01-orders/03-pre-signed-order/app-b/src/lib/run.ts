@@ -1,28 +1,42 @@
 import type { Web3Provider } from '@ethersproject/providers'
 import { Contract } from '@ethersproject/contracts'
-import { OrderBookApi, UnsignedOrder, OrderKind, SigningScheme, OrderCreation } from '@cowprotocol/cow-sdk'
-import { getSafeSdkAndKit } from './getSafeSdkAndKit'
 
-import { APP_DATA, APP_DATA_HASH, SETTLEMENT_CONTRACT_ABI, SETTLEMENT_CONTRACT_ADDRESS } from './const'
+import { OrderBookApi, UnsignedOrder, OrderKind, SigningScheme, OrderCreation } from '@cowprotocol/cow-sdk'
+import { MetadataApi } from '@cowprotocol/app-data'
+
+import { getSafeSdkAndKit } from './getSafeSdkAndKit'
+import { SETTLEMENT_CONTRACT_ABI, SETTLEMENT_CONTRACT_ADDRESS } from './const'
 
 export async function run(provider: Web3Provider): Promise<unknown> {
   const safeAddress = '<PUT_YOUR_SAFE_ADDRESS>'
+  const appCode = '<YOUR_APP_CODE>'
+  const environment = 'prod'
+
+  // Slippage percent, it's 0 to 100
+  const quote = { slippageBips: '50' }
+
+  // "market" | "limit" | "liquidity"
+  const orderClass = { orderClass: 'limit' }
 
   // Get chainId and account from the current provider
   const accounts = await provider.listAccounts()
   const account = accounts[0]
   const chainId = +(await provider.send('eth_chainId', []))
 
-  // Create the CoW Protocol OrderBookApi instance
+  // CoW Protocol OrderBookApi instance
+  // It will be used to send the order to the order-book
   const orderBookApi = new OrderBookApi({ chainId })
+
+  // Order creation requires meta information about the order
+  const metadataApi = new MetadataApi()
 
   // Create the CoW Protocol Settlement contract instance
   const settlementContract = new Contract(SETTLEMENT_CONTRACT_ADDRESS, SETTLEMENT_CONTRACT_ABI)
 
   // Create the Safe SDK and Safe API Kit instances
-  const {safeApiKit, safeSdk} = await getSafeSdkAndKit(chainId, provider, safeAddress)
+  const { safeApiKit, safeSdk } = await getSafeSdkAndKit(chainId, provider, safeAddress)
 
-  // Create the order
+  // The order
   // Pay attention to the `signingScheme` field that is set to `SigningScheme.PRESIGN`
   const defaultOrder: UnsignedOrder = {
     receiver: safeAddress,
@@ -38,13 +52,26 @@ export async function run(provider: Web3Provider): Promise<unknown> {
     signingScheme: SigningScheme.PRESIGN,
   }
 
+  // Generate the app-data document
+  const appDataDoc = await metadataApi.generateAppDataDoc({
+    appCode,
+    environment,
+    metadata: {
+      quote,
+      orderClass
+    },
+  })
+
+  const { appDataHex, appDataContent } = await metadataApi.appDataToCid(appDataDoc)
+
+
   // Add all necessary fields to the order creation request
   const orderCreation: OrderCreation = {
     ...defaultOrder,
     from: safeAddress,
     signature: safeAddress,
-    appData: APP_DATA,
-    appDataHash: APP_DATA_HASH,
+    appData: appDataContent,
+    appDataHash: appDataHex,
   }
 
   // Send order to CoW Protocol order-book
@@ -68,6 +95,7 @@ export async function run(provider: Web3Provider): Promise<unknown> {
   const safeTxHash = await safeSdk.getTransactionHash(signedSafeTx)
   const senderSignature = signedSafeTx.signatures.get(account.toLowerCase())?.data || ''
 
+  // Send the pre-signed transaction to the Safe
   await safeApiKit.proposeTransaction({
     safeAddress,
     safeTransactionData: signedSafeTx.data,

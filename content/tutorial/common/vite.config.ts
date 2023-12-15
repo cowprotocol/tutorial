@@ -5,11 +5,6 @@ export default defineConfig({
     global: 'window',
     process: '{ env: {} }',
   },
-  resolve: {
-    alias: {
-      stream: 'stream-browserify'
-    }
-  },
   server: {
     fs: {
       strict: false

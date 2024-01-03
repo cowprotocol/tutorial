@@ -38,4 +38,6 @@ export async function run(provider: Web3Provider): Promise<unknown> {
     partiallyFillable: true,
     signingScheme: SigningScheme.PRESIGN,
   }
+
+  return
 }

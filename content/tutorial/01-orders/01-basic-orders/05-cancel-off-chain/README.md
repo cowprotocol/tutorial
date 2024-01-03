@@ -83,7 +83,7 @@ export async function run(provider: Web3Provider): Promise<unknown> {
 }
 ```
 
-Just as we did in the [submit order tutorial](/tutorial/submit-order), we are using a `try/catch` block to handle errors.
+Just as we did in the [submit order tutorial](/tutorial/submit), we are using a `try/catch` block to handle errors.
 
 ## Run the code
 

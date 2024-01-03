@@ -36,7 +36,7 @@ export async function run(provider: Web3Provider): Promise<unknown> {
 
 ### Signing the cancellation
 
-Just like we did in the [sign order tutorial](/tutorial/sign-order), we need to sign the cancellation. To do this, we will use the `OrderSigningUtils` utility.
+Just like we did in the [sign order tutorial](/tutorial/sign), we need to sign the cancellation. To do this, we will use the `OrderSigningUtils` utility.
 
 ```typescript
 /// file: run.ts

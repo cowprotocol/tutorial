@@ -157,4 +157,4 @@ In the above case, we can see that:
 - the `feeAmount` is `1881812051493698` atomic units of `wxDAI` (which is `0.001881812051493698` `wxDAI`)
 - the `kind` is `sell`
 
-The above `OrderQuoteResponse` object actually maps to the [`GPv2Order.Data`](https://beta.docs.cow.fi/cow-protocol/reference/contracts/core/settlement#gpv2orderdata-struct) struct for the smart contract, so this is what we will sign in the [next tutorial](/tutorial/sign-order) for our swap.
+The above `OrderQuoteResponse` object actually maps to the [`GPv2Order.Data`](https://beta.docs.cow.fi/cow-protocol/reference/contracts/core/settlement#gpv2orderdata-struct) struct for the smart contract, so this is what we will sign in the [next tutorial](/tutorial/sign) for our swap.

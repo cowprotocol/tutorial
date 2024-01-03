@@ -2,7 +2,7 @@
 title: Submitting
 ---
 
-Further building on the previous tutorial, we will now submit the order we signed in the [sign order tutorial](/tutorial/sign-order) to CoW Protocol.
+Further building on the previous tutorial, we will now submit the order we signed in the [sign order tutorial](/tutorial/sign) to CoW Protocol.
 
 ## Submitting an order
 

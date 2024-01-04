@@ -8,7 +8,6 @@ body {
 	--light-blue: #f4f8fb;
 }
 
-
 body.dark {
 	color-scheme: dark;
 	--sk-back-3-hsl: 216, 100%, 10%;
@@ -48,8 +47,6 @@ body.dark {
 	--cutout: #052b65;
 }
 
-
-
 body.light {
 	color-scheme: light;
 	--sk-back-3-hsl: 206, 64%, 98%;
@@ -61,17 +58,11 @@ body.light {
 	--sk-theme-2-hsl: 240, 8%, 44%;
 	--sk-theme-3-hsl: 204, 100%, 63%;
 	--sk-text-1: #052b65;
-	/* Primary color for main text */
 	--sk-text-2: #052b65;
-	/* Lighter shade of primary color */
 	--sk-text-3: #405a82;
-	/* Even lighter shade */
 	--sk-text-4: #405a82;
-	/* Lightest shade */
 	--sk-scrollbar: #052b654d;
-	/* Scrollbar color using primary color */
 	--sk-theme-1-variant: #084a8d;
-	/* Variant of primary color */
 	--sk-theme-2-variant: #676779;
 	--sk-theme-3-variant: #42b4ff;
 	--sk-code-ts-bg: var(--sk-back-1);
@@ -91,16 +82,9 @@ body.light {
 	--sk-back-translucent: #0000001a;
 	--sk-text-translucent: #000000b3;
 	--faded: #052b6524;
-	/* Adjusted faded color for visibility */
 	--progress: #052b65;
-	/* Primary color for progress */
 	--cutout: #052b65;
-	/* Primary color for cutout */
 }
-
-
-
-
 
 input,
 button {

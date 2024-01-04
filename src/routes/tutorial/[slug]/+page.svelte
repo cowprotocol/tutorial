@@ -326,7 +326,7 @@
 	}
 
 	.navigator .solve.completed {
-		background: var(--sk-theme-2);
+		background: var(--sk-theme-3);
 	}
 
 	.preview {

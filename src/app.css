@@ -8,7 +8,7 @@ body {
 	--light-blue: #f4f8fb;
 }
 
-body.dark {
+html body.dark {
 	color-scheme: dark;
 	--sk-back-3-hsl: 216, 100%, 10%;
 	--sk-back-2-hsl: 216, 100%, 15%;
@@ -47,7 +47,7 @@ body.dark {
 	--cutout: #052b65;
 }
 
-body.light {
+html body.light {
 	color-scheme: light;
 	--sk-back-3-hsl: 206, 64%, 98%;
 	--sk-back-2-hsl: 0, 0%, 100%;

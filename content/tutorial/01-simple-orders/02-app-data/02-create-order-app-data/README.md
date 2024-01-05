@@ -18,7 +18,7 @@ We will start from the basic setup from the [submit order](/tutorial/submit-orde
 
 The keen eye-ed among you will notice that `appDataHex` and `appDataContent` are not used. Let's fix that. When we request a quote, we will pass `appDataHex` and `appDataContent` to the API. This allows the API to:
 
-- validate the app data document and it's has (`appDataHex`)
+- validate the app data document and its hash (`appDataHex`)
 - wrap the app data into the response object
 - determine any additional fees that may be required (if the app data document contains hooks)
 

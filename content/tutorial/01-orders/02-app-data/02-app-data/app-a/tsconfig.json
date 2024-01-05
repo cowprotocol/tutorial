@@ -1,0 +1,15 @@
+{
+    "extends": "../../../../common/tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "../../../../common/*",
+                "../../../../common/node_modules/*"
+            ]
+        }
+    },
+    "include": [
+        "**/*" // Include all files in app-a
+    ]
+}

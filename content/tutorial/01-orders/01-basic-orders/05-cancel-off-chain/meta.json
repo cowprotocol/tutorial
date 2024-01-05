@@ -1,8 +1,0 @@
-{
-	"title": "Cancel order off-chain",
-	"scope": {
-		"prefix": "/src/lib/",
-		"name": "src"
-	},
-	"focus": "/src/lib/run.ts"
-}

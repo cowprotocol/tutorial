@@ -86,6 +86,49 @@ html body.light {
 	--cutout: #052b65;
 }
 
+/* override logo */
+html body a.home-link {
+	background-image: none !important;
+	padding: 0 !important;
+}
+
+#cow-logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 0 0 1rem;
+}
+
+#cow-logo>img {
+	object-fit: contain;
+	width: 100%;
+	height: 3.5rem;
+	margin: 0 1.5rem 0 0;
+}
+
+html body.dark #cow-logo>img {
+	content: url(/cow_logo_light.svg);
+}
+
+#cow-logo-small {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 0 0 2rem;
+}
+
+#cow-logo-small>img {
+	object-fit: contain;
+	width: 100%;
+	height: 3.5rem;
+	margin: 0;
+	;
+}
+
+html body.dark #cow-logo-small>img {
+	content: url(/cow_icon_light.svg);
+}
+
 input,
 button {
 	border: 2px solid transparent;

@@ -12,9 +12,11 @@ const languages = {
 	html: 'markup',
 	svelte: 'svelte',
 	js: 'javascript',
+	json: 'javascript',
 	css: 'css',
 	diff: 'diff',
 	ts: 'typescript',
+	typescript: 'typescript',
 	'': ''
 };
 

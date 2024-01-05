@@ -1,25 +1,29 @@
-# CoW Tutorial
+<p align="center">
+   <img alt="CoW Protocol Logo" width="400" src="./.github/cow.png">
+</p>
 
-A soup-to-nuts interactive tutorial on how to build apps with Svelte.
+# CoW Tutorials
+
+A grass-to-glass tutorial on how to build with CoW Protocol.
 
 ## Setup
 
-This repo uses [pnpm](https://pnpm.io/).
+This repo uses [yarn](https://yarnpkg.com/).
 
 ## Developing the app
 
-First, run `node scripts/create-common-bundle`. This packages up everything that's needed to run a SvelteKit app (Vite, esbuild, SvelteKit, Svelte compiler, etc.) which can subsequently be unpacked on a server to create and run an instance of a SvelteKit application (which powers the output window of the tutorial). Then, run `dev`:
+First, run `node scripts/create-common-bundle`. This packages up everything that's needed to run the app within the webcontainer (Vite, typescript, CoW dependencies, etc.) which can subsequently be unpacked on a server to create and run an instance of a CoW application (which powers the output window of the tutorial). Then, run `dev`:
 
 ```bash
 node scripts/create-common-bundle
-pnpm dev
+yarn dev
 ```
 
 To build for production and run locally:
 
 ```bash
-pnpm build
-pnpm preview
+yarn build
+yarn preview
 ```
 
 ## Creating new tutorials
@@ -28,4 +32,4 @@ Tutorials live inside `content`. Each tutorial consists of a `README.md`, which 
 
 ## Bumping tutorial dependencies
 
-Bump the dependency (for example Svelte) in both the root and the `content/common` `package.json`. In the root do `pnpm i` (to update `pnpm-lock.yaml`), in `content/common` do `npm i` (to update `package-lock.json`).
+Bump the dependency (for example `cow-sdk`) in both the root and the `content/common` `package.json`. In the root do `yarn` (to update `yarn.lock`), in `content/common` do `yarn` (to update `yarn.lock`).

@@ -14,6 +14,7 @@
 <Shell>
 	<Nav title="" links={data.links} slot="top-nav">
 		<svelte:fragment slot="home-large">
+
 			<span id="cow-logo">
 				<img src="/cow_logo_dark.svg" alt="CoW Logo" />
 				tutorials
@@ -24,6 +25,7 @@
 			<span id="cow-logo-small">
 				<img src="/cow_icon_dark.svg" alt="CoW Logo" />
 			</span>
+
 		</svelte:fragment>
 
 		<svelte:fragment slot="search">
@@ -67,6 +69,10 @@
 
 	span {
 		display: none;
+	}
+
+	#cow-word {
+		text-transform: none;
 	}
 
 	@media (min-width: 800px) {

@@ -100,9 +100,7 @@
 
 <style>
 	.loading {
-		--faded: #eee;
-		--progress: #ccc;
-		--cutout: #fff;
+
 		position: absolute;
 		width: 100%;
 		height: 100%;
@@ -161,13 +159,5 @@
 	svg {
 		width: 10rem;
 		height: 10rem;
-	}
-
-	@media (prefers-color-scheme: dark) {
-		.loading {
-			--faded: #444;
-			--progress: #555;
-			--cutout: var(--sk-back-2);
-		}
 	}
 </style>

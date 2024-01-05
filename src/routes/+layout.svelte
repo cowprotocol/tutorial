@@ -14,11 +14,11 @@
 <Shell>
 	<Nav title="" links={data.links} slot="top-nav">
 		<svelte:fragment slot="home-large">
-			<strong>learn</strong>.svelte.dev
+			<strong id="cow-word">CoW</strong> tutorials
 		</svelte:fragment>
 
 		<svelte:fragment slot="home-small">
-			<strong>learn</strong>
+			<strong>CoW</strong>
 		</svelte:fragment>
 
 		<svelte:fragment slot="search">
@@ -62,6 +62,10 @@
 
 	span {
 		display: none;
+	}
+
+	#cow-word {
+		text-transform: none;
 	}
 
 	@media (min-width: 800px) {

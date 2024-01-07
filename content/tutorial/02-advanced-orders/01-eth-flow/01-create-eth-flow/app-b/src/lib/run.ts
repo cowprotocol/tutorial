@@ -1,108 +1,82 @@
 import type { Web3Provider } from '@ethersproject/providers'
-import { Contract } from '@ethersproject/contracts'
-
-import { OrderBookApi, UnsignedOrder, OrderKind, SigningScheme, OrderCreation } from '@cowprotocol/cow-sdk'
+import { BigNumber, Contract } from 'ethers';
+import {
+  SupportedChainId,
+  OrderBookApi,
+  UnsignedOrder,
+  SigningScheme,
+  OrderQuoteRequest,
+  OrderQuoteSideKindSell,
+} from '@cowprotocol/cow-sdk'
 import { MetadataApi, latest } from '@cowprotocol/app-data'
+import abi from './ethFlow.abi.json';
 
-import { getSafeSdkAndKit } from './getSafeSdkAndKit'
-import { SETTLEMENT_CONTRACT_ABI, SETTLEMENT_CONTRACT_ADDRESS } from './const'
+type EthFlowOrder = Omit<UnsignedOrder, 'sellToken' | 'sellTokenBalance' | 'buyTokenBalance' | 'kind' | 'signingScheme'> & {
+  quoteId: number;
+}
 
 export async function run(provider: Web3Provider): Promise<unknown> {
-  const safeAddress = '<PUT_YOUR_SAFE_ADDRESS>'
-  const appCode = '<YOUR_APP_CODE>'
-  const environment = 'prod'
-
-  // Slippage percent, it's 0 to 100
-  const quote = { slippageBips: '50' }
-
-  // "market" | "limit" | "liquidity"
-  const orderClass: latest.OrderClass = { orderClass: 'limit' }
-
-  // Get chainId and account from the current provider
-  const accounts = await provider.listAccounts()
-  const account = accounts[0]
-  const chainId = +(await provider.send('eth_chainId', []))
-
-  // CoW Protocol OrderBookApi instance
-  // It will be used to send the order to the order-book
-  const orderBookApi = new OrderBookApi({ chainId })
-
-  // Order creation requires meta information about the order
-  const metadataApi = new MetadataApi()
-
-  // Create the CoW Protocol Settlement contract instance
-  const settlementContract = new Contract(SETTLEMENT_CONTRACT_ADDRESS, SETTLEMENT_CONTRACT_ABI)
-
-  // Create the Safe SDK and Safe API Kit instances
-  const { safeApiKit, safeSdk } = await getSafeSdkAndKit(chainId, provider, safeAddress)
-
-  // The order
-  // Pay attention to the `signingScheme` field that is set to `SigningScheme.PRESIGN`
-  const defaultOrder: UnsignedOrder = {
-    receiver: safeAddress,
-    buyAmount: '650942340000000000000',
-    buyToken: '0x91056D4A53E1faa1A84306D4deAEc71085394bC8',
-    sellAmount: '100000000000000000',
-    sellToken: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
-    validTo: Math.round((Date.now() + 900_000) / 1000),
-    appData: '0x',
-    feeAmount: '0',
-    kind: OrderKind.SELL,
-    partiallyFillable: true,
-    signingScheme: SigningScheme.PRESIGN,
+  const chainId = +(await provider.send('eth_chainId', []));
+  if (chainId !== SupportedChainId.GNOSIS_CHAIN) {
+      await provider.send('wallet_switchEthereumChain', [{ chainId: SupportedChainId.GNOSIS_CHAIN }]);
   }
+  const orderBookApi = new OrderBookApi({ chainId: SupportedChainId.GNOSIS_CHAIN });
+  const metadataApi = new MetadataApi();
 
-  // Generate the app-data document
+  const appCode = 'Decentralized CoW'
+  const environment = 'production'
+  const referrer = { address: `0xcA771eda0c70aA7d053aB1B25004559B918FE662` }
+  const quoteAppDoc: latest.Quote = { slippageBips: '50' }
+  const orderClass: latest.OrderClass = { orderClass: 'market' }
+
   const appDataDoc = await metadataApi.generateAppDataDoc({
     appCode,
     environment,
     metadata: {
-      quote,
+      referrer,
+      quote: quoteAppDoc,
       orderClass
     },
   })
 
   const { appDataHex, appDataContent } = await metadataApi.appDataToCid(appDataDoc)
 
+  const signer = provider.getSigner();
+  const ownerAddress = await signer.getAddress();
 
-  // Add all necessary fields to the order creation request
-  const orderCreation: OrderCreation = {
-    ...defaultOrder,
-    from: safeAddress,
-    signature: safeAddress,
+  const ethFlowAddress = '0x40A50cf069e992AA4536211B23F286eF88752187';
+  const ethFlowContract = new Contract(ethFlowAddress, abi, signer);
+
+  const sellToken = await ethFlowContract.wrappedNativeToken();
+  const buyToken = '0x177127622c4A00F3d409B75571e12cB3c8973d3c'; // COW
+  const sellAmount = '1000000000000000000'; // 1 wxDAI
+
+  const quoteRequest: OrderQuoteRequest = {
+    sellToken,
+    buyToken,
+    sellAmountBeforeFee: sellAmount,
+    kind: OrderQuoteSideKindSell.SELL,
+    receiver: ownerAddress,
+    from: ownerAddress,
     appData: appDataContent,
     appDataHash: appDataHex,
+    signingScheme: SigningScheme.EIP1271,
+    onchainOrder: true,
   }
 
-  // Send order to CoW Protocol order-book
-  const orderId = await orderBookApi.sendOrder(orderCreation)
+  const { quote, id: quoteId } = await orderBookApi.getQuote(quoteRequest);
 
-  // Create the pre-signature transaction
-  const presignCallData = settlementContract.interface.encodeFunctionData('setPreSignature', [
-    orderId,
-    true,
-  ])
-  const presignRawTx = {
-    to: settlementContract.address,
-    data: presignCallData,
-    value: '0',
+  const order: EthFlowOrder = {
+    ...quote,
+    buyAmount: BigNumber.from(quote.buyAmount).mul(9950).div(10000).toString(),
+    receiver: ownerAddress,
+    appData: appDataHex,
+    quoteId,
   }
 
-  // Send pre-signature transaction to settlement contract
-  // In this example we are using the Safe SDK, but you can use any other smart-contract wallet
-  const safeTx = await safeSdk.createTransaction({safeTransactionData: presignRawTx})
-  const signedSafeTx = await safeSdk.signTransaction(safeTx)
-  const safeTxHash = await safeSdk.getTransactionHash(signedSafeTx)
-  const senderSignature = signedSafeTx.signatures.get(account.toLowerCase())?.data || ''
+  const tx = await ethFlowContract.createOrder(order, { value: sellAmount });
+  console.log('Transaction Hash:', tx.hash);
+  const receipt = await tx.wait();
 
-  // Send the pre-signed transaction to the Safe
-  await safeApiKit.proposeTransaction({
-    safeAddress,
-    safeTransactionData: signedSafeTx.data,
-    safeTxHash,
-    senderAddress: account,
-    senderSignature,
-  })
-
-  return { orderId, safeTxHash, senderSignature }
+  return receipt;
 }

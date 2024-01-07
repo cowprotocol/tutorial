@@ -1,5 +1,0 @@
----
-title: Viewing status
----
-
-Something

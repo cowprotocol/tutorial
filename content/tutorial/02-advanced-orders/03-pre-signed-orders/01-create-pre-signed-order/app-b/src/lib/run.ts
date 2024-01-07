@@ -55,18 +55,18 @@ export async function run(provider: Web3Provider): Promise<unknown> {
       "type": "function"
     }
   ]
- 
+
   const SAFE_TRANSACTION_SERVICE_URL: Record<SupportedChainId, string> = {
     [SupportedChainId.MAINNET]: 'https://safe-transaction-mainnet.safe.global',
     [SupportedChainId.GNOSIS_CHAIN]: 'https://safe-transaction-gnosis-chain.safe.global',
     [SupportedChainId.GOERLI]: 'https://safe-transaction-goerli.safe.global',
   }
-  
+
   const getSafeSdkAndKit = async (safeAddress: string) => {
     const ethAdapter = new EthersAdapter({ ethers, signerOrProvider: signer })
     const txServiceUrl = SAFE_TRANSACTION_SERVICE_URL[chainId]
     const safeApiKit = new SafeApiKit({ txServiceUrl, ethAdapter })
-  
+
     const safeSdk = await Safe.create({ethAdapter, safeAddress});
 
     return { safeApiKit, safeSdk }
@@ -77,7 +77,7 @@ export async function run(provider: Web3Provider): Promise<unknown> {
     const signedSafeTx = await safeSdk.signTransaction(safeTx)
     const safeTxHash = await safeSdk.getTransactionHash(signedSafeTx)
     const senderSignature = signedSafeTx.signatures.get(ownerAddress.toLowerCase())?.data || ''
-  
+
     // Send the pre-signed transaction to the Safe
     await safeApiKit.proposeTransaction({
       safeAddress,

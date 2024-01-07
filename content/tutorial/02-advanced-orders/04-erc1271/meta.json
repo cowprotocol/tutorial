@@ -1,5 +1,5 @@
 {
-	"title": "Milkman",
+	"title": "ERC-1271",
 	"scope": {
 		"prefix": "/src/lib/",
 		"name": "src"

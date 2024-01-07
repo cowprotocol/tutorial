@@ -1,5 +1,0 @@
----
-title: Cancelling order
----
-
-Something

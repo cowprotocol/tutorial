@@ -6,14 +6,17 @@
   "scripts": {
     "dev": "./node_modules/vite/bin/vite.js dev",
     "build": "tsc && vite build",
+    "server": "node server/index.js",
     "preview": "vite preview"
   },
   "dependencies": {
     "@cowprotocol/app-data": "^1.2.2",
     "@cowprotocol/cow-sdk": "^4.0.3",
+    "@openzeppelin/merkle-tree": "^1.0.5",
     "@safe-global/api-kit": "^1.3.0",
     "@safe-global/protocol-kit": "^1.2.0",
-    "ethers": "^5.7.2"
+    "ethers": "^5.7.2",
+    "solc": "^0.8.23-fixed"
   },
   "devDependencies": {
     "@rollup/wasm-node": "^4.8.0",

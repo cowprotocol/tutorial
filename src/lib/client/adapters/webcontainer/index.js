@@ -131,7 +131,17 @@ export async function create(base, error, progress, logs, warnings) {
 				fulfil(base); // this will be the last thing that happens if everything goes well
 			});
 
-			await run_dev();
+      run_server()
+
+			await run_dev()
+
+      async function run_server() {
+        const process = await vm.spawn('npm', ['run', 'server']);
+
+        process.output.pipeTo(log_stream());
+
+        await process.exit;
+      }
 
 			async function run_dev() {
 				const process = await vm.spawn('turbo', ['run', 'dev']);

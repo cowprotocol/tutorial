@@ -1,5 +1,6 @@
 import express from 'express'
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree'
+import solc from 'solc'
 
 const app = express()
 const port = 3117
@@ -17,6 +18,28 @@ app.get('/merkle-tree', (_, res) => {
   const tree = StandardMerkleTree.of(values, ['address', 'uint256']);
 
   res.json(tree)
+})
+
+app.get('/solc', (_, res) => {
+  var input = {
+    language: 'Solidity',
+    sources: {
+      'test.sol': {
+        content: 'contract C { function f() public { } }'
+      }
+    },
+    settings: {
+      outputSelection: {
+        '*': {
+          '*': ['*']
+        }
+      }
+    }
+  };
+
+  var solcRes = JSON.parse(solc.compile(JSON.stringify(input)));
+
+  res.json({solcRes})
 })
 
 app.listen(port, () => {

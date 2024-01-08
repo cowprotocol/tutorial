@@ -54,6 +54,10 @@
 {/if}
 
 <style>
+  :global(.home-link) {
+    background-image: url(/cow-logo.svg)!important;
+  }
+
 	:global(body) {
 		margin: 0;
 		width: 100%;
